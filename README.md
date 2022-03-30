@@ -21,30 +21,30 @@ window["Alps2Scanner"].getIsInitialized(
 
 ## Functions
 
-`getIsInitialized(`successCallback, errorCallback`)`
+`getIsInitialized(successCallback, errorCallback)`
 
 Check if the plugin service is initialized. If false, initialize with _initializeService_.
 
-`uninitializeService(`successCallback, errorCallback`)`
+`uninitializeService(successCallback, errorCallback)`
 
 De-initialize service running on the device. Not used normally.
 
-#### `initializeService(`successCallback, errorCallback`)`
+`initializeService(successCallback, errorCallback)`
 
 Initialize the service running on the device.
 
-#### `triggerUHFContinuous(`successCallback, errorCallback`)`
+`triggerUHFContinuous(successCallback, errorCallback)`
 
 Starts continuous RFID scanning. successCallback called every time an RFID is scanned. Stop with _triggerUHFEnd_.
 
-#### `triggerUHFSingle(`successCallback, errorCallback`)`
+`triggerUHFSingle(successCallback, errorCallback)`
 
 Starts RFID scanner and stops it after first scan. Cancel with _triggerUHFEnd_.
 
-#### `triggerUHFEnd(`successCallback, errorCallback`)`
+`triggerUHFEnd(successCallback, errorCallback)`
 
 Ends RFID scanning, whether single or continuous.
 
-#### `scanBarcode(`successCallback, errorCallback`)`
+`scanBarcode(successCallback, errorCallback)`
 
 Triggers a single barcode scan.
