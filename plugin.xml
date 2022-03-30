@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-ia-x6-scanner" version="1.0.0">
+	<description>X6 Handheld scanner plugin</description>
+	<name>X6 Scanner Plugin</name>
+	<author>IntelliAcc</author>
+	<license>Apache 2.0</license>
+	<keywords>cordova,alps,scanner,rfid,phonegap</keywords>
+	<js-module src="www/Alps2Scanner.js" name="Alps2Scanner">
+		<clobbers target="Alps2Scanner" />
+	</js-module>
+	<platform name="android">
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="Alps2Scanner">
+				<param name="android-package" value="com.intelliacc.alps2Scanner.Alps2Scanner" />
+			</feature>
+		</config-file>
+		<config-file target="res/values/strings.xml" parent="/*">
+			<string name="initializing">
+				initializing...
+			</string>
+		</config-file>
+
+		<source-file src="src/android/Alps2Scanner.java" target-dir="src/com/intelliacc/alps2Scanner" />
+		
+		<!-- RFID -->
+		<source-file src="src/android/Lf134KManager.java" target-dir="src/com/intelliacc/alps2Scanner" />
+		<source-file src="src/android/Lf134kDataModel.java" target-dir="src/com/intelliacc/alps2Scanner" />
+		<source-file src="src/android/Util.java" target-dir="src/com/intelliacc/alps2Scanner" />
+		<source-file src="src/android/Tagid.java" target-dir="src/com/intelliacc/alps2Scanner" />
+
+		<!-- Barcodes -->
+		<source-file src="src/android/Barcode.java" target-dir="src/com/intelliacc/alps2Scanner" />
+		<source-file src="src/android/LogUtils.java" target-dir="src/com/intelliacc/alps2Scanner" />
+		<source-file src="src/android/ScanThread.java" target-dir="src/com/intelliacc/alps2Scanner" />
+
+		<source-file src="src/android/SerialPort2.java" target-dir="src/cn/pda/serialport" />
+		<source-file src="src/android/Tools2.java" target-dir="src/cn/pda/serialport" />
+
+		<!-- Audio -->
+		<source-file src="src/android/res/raw/alps2_beep_err.wav" target-dir="res/raw" />
+		<source-file src="src/android/res/raw/alps2_beep_ok.wav" target-dir="res/raw" />
+
+		<!-- Libraries and SDK -->
+		<source-file src="src/android/libs/arm64-v8a/libdevapi.so" target-dir="jniLibs/arm64-v8a" />
+		<source-file src="src/android/libs/arm64-v8a/libirdaSerialPort.so" target-dir="jniLibs/arm64-v8a" />
+		<source-file src="src/android/libs/armeabi/libdevapi.so" target-dir="jniLibs/armeabi" />
+		<source-file src="src/android/libs/armeabi/libirdaSerialPort.so" target-dir="jniLibs/armeabi" />
+		<source-file src="src/android/libs/armeabi-v7a/libdevapi.so" target-dir="jniLibs/armeabi-v7a" />
+		<source-file src="src/android/libs/armeabi-v7a/libirdaSerialPort.so" target-dir="jniLibs/armeabi-v7a" />
+		<lib-file src="src/android/libs/uhfr_v1.8.jar" />
+
+	</platform>
+</plugin>
