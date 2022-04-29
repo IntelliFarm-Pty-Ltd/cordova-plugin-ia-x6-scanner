@@ -1,22 +1,12 @@
 package com.intelliacc.alps2Scanner;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.KeyEvent;
-import cn.pda.serialport.SerialPort2;
-import cn.pda.serialport.Tools2;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -24,6 +14,9 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Alps2Scanner extends CordovaPlugin {
   private final String TAG = "Alps2Scanner";
