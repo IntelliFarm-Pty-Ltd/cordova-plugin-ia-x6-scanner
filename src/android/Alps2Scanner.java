@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.pda.serialport.Tools2;
+
 public class Alps2Scanner extends CordovaPlugin {
   private final String TAG = "Alps2Scanner";
   private int allCount = 0; // inventory count
