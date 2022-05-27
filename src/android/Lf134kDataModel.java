@@ -1,7 +1,5 @@
 package com.intelliacc.alps2Scanner;
 
-import android.R.integer;
-
 public class Lf134kDataModel {
 	public byte[] ID = new byte[10];
 	public byte[] Country  = new byte[4];

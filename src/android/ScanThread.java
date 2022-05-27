@@ -1,12 +1,5 @@
 package com.intelliacc.alps2Scanner;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,8 +7,12 @@ import android.util.Log;
 
 import org.apache.cordova.PluginResult;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Timer;
+
 import cn.pda.serialport.SerialPort;
-import cn.pda.serialport.Tools;
 
 public class ScanThread extends Thread {
 
@@ -24,11 +21,10 @@ public class ScanThread extends Thread {
     private SerialPort mSerialPort;
     private InputStream is;
     private OutputStream os;
-    /* serialport parameter */
+
     public static int port = 0;
-    private int baudrate = 9600;
-//    private int baudrate = 4800;
-    private int flags = 0;
+    private final int BAUD = 9600;
+    private final int FLAGS = 0;
 
     private Handler handler;
 
@@ -45,7 +41,7 @@ public class ScanThread extends Thread {
      */
     public ScanThread(Handler handler) throws SecurityException, IOException {
         this.handler = handler;
-        mSerialPort = new SerialPort(port, baudrate, flags);
+        mSerialPort = new SerialPort(port, BAUD, flags);
         if (port == 0) {
             mSerialPort.scaner_poweron();
         }

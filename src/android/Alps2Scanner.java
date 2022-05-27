@@ -22,12 +22,11 @@ import cn.pda.serialport.Tools2;
 
 public class Alps2Scanner extends CordovaPlugin {
   private final String TAG = "Alps2Scanner";
-  private int allCount = 0; // inventory count
 
   private boolean startFlag = false;
 
   private CallbackContext CallbackContext; // The callback context from which we were invoked.
-  private JSONArray executeArgs;
+  // private JSONArray executeArgs;
 
   private Lf134KManager manager;
   public boolean shouldKeepCallback = false;
@@ -42,34 +41,22 @@ public class Alps2Scanner extends CordovaPlugin {
   PluginResult resultLoop;
 
   @Override
-  public boolean execute(
-    String action,
-    JSONArray args,
-    CallbackContext CallbackContext
-  )
-    throws JSONException {
+  public boolean execute(String action, JSONArray args, CallbackContext CallbackContext) throws JSONException {
     this.CallbackContext = CallbackContext;
-    this.executeArgs = args;
+    // this.executeArgs = args;
+
     Context context = this.cordova.getActivity().getApplicationContext();
+
     IntentFilter filter = new IntentFilter();
     filter.addAction("android.rfid.FUN_KEY");
     filter.addAction("android.intent.action.FUN_KEY");
     this.cordova.getActivity()
-      .getApplicationContext()
-      .registerReceiver(keyReceiver, filter);
+        .getApplicationContext()
+        .registerReceiver(keyReceiver, filter);
 
     if (action.equals("getMServiceInit")) {
-      boolean init = false;
-
-      if (manager == null) {
-        init = false;
-      } else {
-        init = true;
-      }
-
       CallbackContext.sendPluginResult(
-        new PluginResult(PluginResult.Status.OK, init)
-      );
+          new PluginResult(PluginResult.Status.OK, manager != null));
       return true;
     }
 
@@ -87,56 +74,51 @@ public class Alps2Scanner extends CordovaPlugin {
       }
       if (this.cordova.getActivity() != null) {
         this.cordova.getActivity()
-          .getApplicationContext()
-          .unregisterReceiver(keyReceiver);
+            .getApplicationContext()
+            .unregisterReceiver(keyReceiver);
       }
       CallbackContext.sendPluginResult(
-        new PluginResult(PluginResult.Status.OK, true)
-      );
+          new PluginResult(PluginResult.Status.OK, true));
       return true;
     }
 
     if (action.equals("initMService")) {
       try {
         manager = new Lf134KManager();
-//        Util.initSoundPool(context);
+        // Util.initSoundPool(context);
 
         CallbackContext.sendPluginResult(
-          new PluginResult(PluginResult.Status.OK, true)
-        );
+            new PluginResult(PluginResult.Status.OK, true));
       } catch (Exception e) {
         CallbackContext.sendPluginResult(
-          new PluginResult(PluginResult.Status.OK, false)
-        );
-        //Toast.makeText(App.this, "dasd", Toast.LENGTH_SHORT).show();
+            new PluginResult(PluginResult.Status.OK, false));
+        // Toast.makeText(App.this, "dasd", Toast.LENGTH_SHORT).show();
       }
     }
 
     if (action.equals("triggerUHFContinuous")) {
       cordova
-        .getThreadPool()
-        .execute(
-          new Runnable() {
-            public void run() {
-              shouldKeepCallback = true;
-              triggerUHFContinuous();
-            }
-          }
-        );
+          .getThreadPool()
+          .execute(
+              new Runnable() {
+                public void run() {
+                  shouldKeepCallback = true;
+                  triggerUHFContinuous();
+                }
+              });
       return true;
     }
 
     if (action.equals("triggerUHFSingle")) {
       cordova
-        .getThreadPool()
-        .execute(
-          new Runnable() {
-            public void run() {
-              shouldKeepCallback = false;
-              triggerUHFContinuous();
-            }
-          }
-        );
+          .getThreadPool()
+          .execute(
+              new Runnable() {
+                public void run() {
+                  shouldKeepCallback = false;
+                  triggerUHFContinuous();
+                }
+              });
       return true;
     }
 
@@ -147,8 +129,7 @@ public class Alps2Scanner extends CordovaPlugin {
 
     if (action.equals("getUHFLoop")) {
       CallbackContext.sendPluginResult(
-        new PluginResult(PluginResult.Status.OK, isUHFLoop)
-      );
+          new PluginResult(PluginResult.Status.OK, false));
 
       return true;
     }
@@ -178,7 +159,7 @@ public class Alps2Scanner extends CordovaPlugin {
     // RFID
     this.startFlag = false;
     this.runFlag = false;
-    //    this.manager.Close();
+    // this.manager.Close();
 
     // BARCODE
     if (scanThread != null) {
@@ -199,43 +180,38 @@ public class Alps2Scanner extends CordovaPlugin {
       // e.printStackTrace();
     }
     scanThread.start();
-    //init sound
-//    Util.initSoundPool(this.cordova.getActivity().getApplicationContext());
+    // init sound
+    // Util.initSoundPool(this.cordova.getActivity().getApplicationContext());
     scanThread.scan();
-    //注册按键广播接收者
-//    keyReceiver = new KeyReceiver();
-//    IntentFilter filter = new IntentFilter();
-//    filter.addAction("android.rfid.FUN_KEY");
-//    filter.addAction("android.intent.action.FUN_KEY");
-//    registerReceiver(keyReceiver, filter);
-//    mRegisterFlag = true;
+    // 注册按键广播接收者
+    // keyReceiver = new KeyReceiver();
+    // IntentFilter filter = new IntentFilter();
+    // filter.addAction("android.rfid.FUN_KEY");
+    // filter.addAction("android.intent.action.FUN_KEY");
+    // registerReceiver(keyReceiver, filter);
+    // mRegisterFlag = true;
   }
 
-  //key receiver
+  // key receiver
   private long startTime = 0;
   private boolean keyUpFalg = true;
   private BroadcastReceiver keyReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       int keyCode = intent.getIntExtra("keyCode", 0);
-      if (keyCode == 0) { //H941
+      if (keyCode == 0) { // H941
         keyCode = intent.getIntExtra("keycode", 0);
       }
       boolean keyDown = intent.getBooleanExtra("keydown", false);
-      if (
-        keyUpFalg && keyDown && System.currentTimeMillis() - startTime > 500
-      ) {
+      if (keyUpFalg && keyDown && System.currentTimeMillis() - startTime > 500) {
         keyUpFalg = false;
         startTime = System.currentTimeMillis();
-        if (
-          ( //keyCode == KeyEvent.KEYCODE_F1 || keyCode == KeyEvent.KEYCODE_F2
-            keyCode == KeyEvent.KEYCODE_F3 ||
-            //                                 keyCode == KeyEvent.KEYCODE_F4 ||
-            keyCode == KeyEvent.KEYCODE_F5
-          )
-        ) {
-          //                Log.e("key ","inventory.... " ) ;
-          //          onClick(btnStart);
+        if (( // keyCode == KeyEvent.KEYCODE_F1 || keyCode == KeyEvent.KEYCODE_F2
+        keyCode == KeyEvent.KEYCODE_F3 ||
+        // keyCode == KeyEvent.KEYCODE_F4 ||
+            keyCode == KeyEvent.KEYCODE_F5)) {
+          // Log.e("key ","inventory.... " ) ;
+          // onClick(btnStart);
           isRead();
         }
         return;
@@ -249,7 +225,7 @@ public class Alps2Scanner extends CordovaPlugin {
 
   public void isRead() {
     if (manager == null) {
-      //      showToast(getActivity().getString(R.string.connection_failed));
+      // showToast(getActivity().getString(R.string.connection_failed));
       return;
     }
     Context context = this.cordova.getActivity().getApplicationContext();
@@ -260,7 +236,7 @@ public class Alps2Scanner extends CordovaPlugin {
     } else {
       final Intent intent = new Intent("hardwareTriggerOff");
       context.sendOrderedBroadcast(intent, null);
-      //  triggerUHFEnd();
+      // triggerUHFEnd();
     }
   }
 
@@ -276,72 +252,69 @@ public class Alps2Scanner extends CordovaPlugin {
           Lf134kDataModel model = manager.GetData(1000);
           if (model != null) {
             sendMSG(
-              Tools2.BytesToLong(model.ID) + "",
-              Tools2.BytesToLong(model.Country) + "",
-              model.Type
-            );
+                Tools2.BytesToLong(model.ID) + "",
+                Tools2.BytesToLong(model.Country) + "",
+                model.Type);
           }
         }
       }
     }
 
-		private void sendMSG(String id, String nation, String type) {
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					int position;
-					//      allCount++;
-					JSONObject res = new JSONObject();
-					try {
-						// EpcDataModel epcTag = new EpcDataModel();
-						// res.setepc(epc);
-						res.put("data", id);
-						res.put("Count", 1);
-						res.put("nation", nation);
-						res.put("type", type);
-						//        res.put("isloop", isUHFLoop);
-		
-						resultLoop = new PluginResult(PluginResult.Status.OK, res.toString(2));
-						resultLoop.setKeepCallback(shouldKeepCallback);
-						CallbackContext.sendPluginResult(resultLoop);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}, 200);
-		}
+    private void sendMSG(String id, String nation, String type) {
+      new Timer().schedule(new TimerTask() {
+        @Override
+        public void run() {
+          int position;
+          JSONObject res = new JSONObject();
+          try {
+            // EpcDataModel epcTag = new EpcDataModel();
+            // res.setepc(epc);
+            res.put("data", id);
+            res.put("Count", 1);
+            res.put("nation", nation);
+            res.put("type", type);
+
+            resultLoop = new PluginResult(PluginResult.Status.OK, res.toString(2));
+            resultLoop.setKeepCallback(shouldKeepCallback);
+            CallbackContext.sendPluginResult(resultLoop);
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
+        }
+      }, 200);
+    }
   }
 
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(android.os.Message msg) {
-				if (msg.what == ScanThread.SCAN) {
-//                String data = msg.getData().getString("data");
-						byte[] dataBytes = msg.getData().getByteArray("dataBytes");
-						if (dataBytes == null || dataBytes.length == 0) {
-								if (mIsContinuous) {
-										scanThread.scan();
-								}
-								return;
-						}
-            JSONObject res = new JSONObject();
+  private Handler mHandler = new Handler() {
+    @Override
+    public void handleMessage(android.os.Message msg) {
+      if (msg.what == ScanThread.SCAN) {
+        // String data = msg.getData().getString("data");
+        byte[] dataBytes = msg.getData().getByteArray("dataBytes");
+        if (dataBytes == null || dataBytes.length == 0) {
+          if (mIsContinuous) {
+            scanThread.scan();
+          }
+          return;
+        }
+        JSONObject res = new JSONObject();
 
-            String dataStr = new String(dataBytes, 0, dataBytes.length);
-            try {
-              res.put("data", dataStr);
-              res.put("dataBytes", dataBytes);
-              resultLoop = new PluginResult(PluginResult.Status.OK, res.toString(2));
-              resultLoop.setKeepCallback(shouldKeepCallback);
-              CallbackContext.sendPluginResult(resultLoop);
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+        String dataStr = new String(dataBytes, 0, dataBytes.length);
+        try {
+          res.put("data", dataStr);
+          res.put("dataBytes", dataBytes);
+          resultLoop = new PluginResult(PluginResult.Status.OK, res.toString(2));
+          resultLoop.setKeepCallback(shouldKeepCallback);
+          CallbackContext.sendPluginResult(resultLoop);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
 
-//						Util.play(1, 0);
-						if (mIsContinuous) {
-								scanThread.scan();
-						}
-				}
-		};
-};
+        // Util.play(1, 0);
+        if (mIsContinuous) {
+          scanThread.scan();
+        }
+      }
+    };
+  };
 }

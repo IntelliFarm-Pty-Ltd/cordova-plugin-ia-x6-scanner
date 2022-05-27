@@ -80,9 +80,8 @@ public class SerialPort2 {
 	public static final int baudrate256000 = 256000;
 	private static final String TAG = "SerialPort";
 
-
 	public static int TNCOM_EVENPARITY = 0;//
-	public static int TNCOM_ODDPARITY = 1 ;//
+	public static int TNCOM_ODDPARITY = 1;//
 
 	/*
 	 * Do not remove or rename the field mFd: it is used by native method close();
@@ -90,14 +89,16 @@ public class SerialPort2 {
 	private FileDescriptor mFd;
 	private FileInputStream mFileInputStream;
 	private FileOutputStream mFileOutputStream;
-	private boolean trig_on=false;
+	private boolean trig_on = false;
 	byte[] test;
+
 	//
-	public SerialPort2(){}
+	public SerialPort2() {
+	}
 
 	public SerialPort2(int port, int baudrate, int flags) throws SecurityException, IOException {
-//		System.load("//data/data/com.example.uartdemo/lib/libdevapi.so");
-//		System.load("/data/data/com.example.uartdemo/lib/libSerialPort.so");
+		// System.load("//data/data/com.example.uartdemo/lib/libdevapi.so");
+		// System.load("/data/data/com.example.uartdemo/lib/libSerialPort.so");
 		mFd = open(port, baudrate);
 
 		if (mFd == null) {
@@ -105,13 +106,11 @@ public class SerialPort2 {
 			throw new IOException();
 		}
 
-
 		mFileInputStream = new FileInputStream(mFd);
 		mFileOutputStream = new FileOutputStream(mFd);
 
-
-
 	}
+
 	// Getters and setters
 	public InputStream getInputStream() {
 		return mFileInputStream;
@@ -120,87 +119,114 @@ public class SerialPort2 {
 	public OutputStream getOutputStream() {
 		return mFileOutputStream;
 	}
+
 	public void power_5Von() {
 		zigbeepoweron();
 	}
-	public void power_5Voff(){
+
+	public void power_5Voff() {
 		zigbeepoweroff();
 	}
-	public void power_3v3on(){
+
+	public void power_3v3on() {
 		power3v3on();
 	}
-	public void power_3v3off(){
+
+	public void power_3v3off() {
 		power3v3off();
 	}
-	public void rfid_poweron(){
+
+	public void rfid_poweron() {
 		rfidPoweron();
 	}
-	public void rfid_poweroff(){
+
+	public void rfid_poweroff() {
 		rfidPoweroff();
 	}
+
 	public void psam_poweron() {
 		psampoweron();
 	}
+
 	public void psam_poweroff() {
 		psampoweroff();
-		//scaner_trigoff();
+		// scaner_trigoff();
 	}
+
 	public void scaner_poweron() {
 		scanerpoweron();
 		scaner_trigoff();
 	}
+
 	public void scaner_poweroff() {
 		scanerpoweroff();
-		//scaner_trigoff();
+		// scaner_trigoff();
 	}
+
 	public void scaner_trigon() {
 		scanertrigeron();
-		trig_on=true;
+		trig_on = true;
 	}
+
 	public void scaner_trigoff() {
 		scanertrigeroff();
-		trig_on=false;
+		trig_on = false;
 	}
-	public boolean scaner_trig_stat(){
+
+	public boolean scaner_trig_stat() {
 		return trig_on;
 	}
 	// JNI
 
 	private native static FileDescriptor open(int port, int baudrate);
+
 	private native static FileDescriptor open(int port, int baudrate, int portparity);
+
 	public native void close(int port);
+
 	public native void zigbeepoweron();
+
 	public native void zigbeepoweroff();
 
 	public native void scanerpoweron();
+
 	public native void scanerpoweroff();
+
 	public native void psampoweron();
+
 	public native void psampoweroff();
+
 	public native void scanertrigeron();
+
 	public native void scanertrigeroff();
+
 	public native void power3v3on();
+
 	public native void power3v3off();
 
 	public native void rfidPoweron();
+
 	public native void rfidPoweroff();
 
 	public native void usbOTGpowerOn();
+
 	public native void usbOTGpowerOff();
 
 	public native void irdapoweron();
+
 	public native void irdapoweroff();
 
 	public native void setGPIOhigh(int gpio);
+
 	public native void setGPIOlow(int gpio);
 
-
-//	public native void setPortParity(int mode); //
+	// public native void setPortParity(int mode); //
 
 	public native void test(byte[] bytes);
 
-  static {
-    System.loadLibrary("devapi");
-    System.loadLibrary("irdaSerialPort");
-  }
+	static {
+		System.loadLibrary("devapi");
+		System.loadLibrary("irdaSerialPort");
+	}
 
 }
