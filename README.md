@@ -1,7 +1,6 @@
 # cordova-plugin-ia-x6-scanner
 
-[![Latest Stable Version](https://img.shields.io/npm/v/cordova-plugin-ia-x6-scanner.svg)](https://www.npmjs.com/package/cordova-plugin-x6-scanner)
-[![Total Downloads](https://img.shields.io/npm/dt/cordova-plugin-ia-x6-scanner.svg)](https://npm-stat.com/charts.html?package=cordova-plugin-x6-scanner)
+[![npm version](https://badge.fury.io/js/cordova-plugin-ia-x6-scanner.png)](https://www.npmjs.com/package/cordova-plugin-ia-x6-scanner)
 
 Cordova plugin for the X6 Handheld Scanner
 
