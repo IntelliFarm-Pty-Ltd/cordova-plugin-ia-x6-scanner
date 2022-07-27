@@ -41,7 +41,7 @@ public class ScanThread extends Thread {
      */
     public ScanThread(Handler handler) throws SecurityException, IOException {
         this.handler = handler;
-        mSerialPort = new SerialPort(port, BAUD, flags);
+        mSerialPort = new SerialPort(port, BAUD, FLAGS);
         if (port == 0) {
             mSerialPort.scaner_poweron();
         }
